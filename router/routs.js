@@ -6,7 +6,7 @@ const {
 	createData,
 	updateData,
 	deleteData,
-	findByQuery,
+	photoUpload,
 } = require("../controller/control");
 
 /**
@@ -19,5 +19,6 @@ router.route("/").get(getData).post(createData);
 
 //cause those request methods need the id of the data
 router.route("/:id").get(getSingleData).put(updateData).delete(deleteData);
+router.route("/:id/photo").put(photoUpload);
 
 module.exports = router;

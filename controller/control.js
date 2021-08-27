@@ -100,14 +100,45 @@ exports.updateData = asyncHandler(async (req, res, next) => {
 exports.deleteData = asyncHandler(async (req, res, next) => {
 	const deleteData = await modelSchema.findByIdAndDelete(req.params.id);
 	if (!deleteData) {
-		return new ErrorResponse(
-			`there is no data in the in this id:${req.params.id}`,
-			404
+		return next(
+			new ErrorResponse(
+				`there is no data in the in this id:${req.params.id}`,
+				404
+			)
 		);
 	}
 	res.status({
 		success: true,
 		data: {},
+	});
+});
+
+exports.photoUpload = asyncHandler(async (req, res, next) => {
+	const photo = await modelSchema.findById(req.params.id);
+
+	if (!photo) {
+		return next(new ErrorResponse("photo uploaded is not found ", 404));
+	}
+	if (!req.files) {
+		return next(new ErrorResponse("please upload a photo", 404));
+	}
+	if (!req.files.photo.mimetype.startsWith("image")) {
+		return next(new ErrorResponse("please upload an image", 404));
+	}
+	if (req.files.size > process.env.MAX_PHOTO_SIZE) {
+		return next(
+			new ErrorResponse(
+				`please upload file size less than one mb or${process.env.MAX_PHOTO_SIZE}`,
+				404
+			)
+		);
+	}
+	const name = req.files.photo.naming;
+	naming = `photo_${modelSchema.name}`;
+	console.log(modelSchema._id);
+	res.status(200).json({
+		success: true,
+		data: req.files.photo,
 	});
 });
 
