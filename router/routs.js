@@ -6,7 +6,12 @@ const {
 	createData,
 	updateData,
 	deleteData,
+	findByQuery,
 } = require("../controller/control");
+
+/**
+ * we can bind the router path under this router.use('rout ', and binding object)
+ */
 
 const router = express.Router();
 

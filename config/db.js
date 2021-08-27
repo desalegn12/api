@@ -15,42 +15,4 @@ const mongoDB = async () => {
 	);
 };
 
-/**this is all about the crud operation of mangoDB  */
-
-/**find by name or other field */
-// MyDatabase.create(
-// 	{
-// 		name: "miky yalew",
-// 	},
-// 	(err, database) => {
-// 		console.log(
-// 			`err:${err}`.red.bold,
-// 			` result:${database}`.green.italic
-// 		);
-// 	}
-// );
-
-// const id = "611f745f4daa1a2afdbfae1a";
-
-/**find by id  */
-// MyDatabase.find(
-// 	{
-// 		id,
-// 	},
-// 	(err, data) => {
-// 		console.log(`err:${err}`.red.bold, `result:${data}`.green.italic);
-// 	}
-// );
-
-/**updating by id  */
-
-// MyDatabase.findByIdAndUpdate(id, { name: "Updated name" }, (err, data) => {
-// 	console.log(`err:${err}`.red.bold, `result:${data}`.green.italic);
-// });
-
-/**deleting */
-// MyDatabase.findByIdAndDelete(id, (err, data) => {
-// 	console.log(`err:${err}`.red.bold, `result:${data}`.green.italic);
-// });
-
 module.exports = mongoDB;

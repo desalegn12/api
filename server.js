@@ -2,6 +2,7 @@ const express = require("express");
 const colors = require("colors");
 //environment variable calling though this library
 const dotenv = require("dotenv");
+//this is mounting the path if they are builtin they needs not mount the path right
 const logger = require("./middleWire/logger");
 const morgan = require("morgan");
 
@@ -18,9 +19,13 @@ if (process.env.NODE_ENV === "development") {
 	app.use(morgan("dev"));
 }
 //this is the database want to connect
+/**the database must be called after the environment variable is configured  */
+
 mongoDB();
-app.use("/api/v/coming", Router);
-//all the middleWire must be called here because sequential run of express
+app.use(logger);
+app.use("/api/v/coming", Router); //because after this one is excuted then request response cycle is ended
+/**based on this every middleware functions called before the route
+ * and error middleware after them cause, the request response cycle is not end up if there is error  */
 app.use(error);
 
 const PORT = process.env.PORT || 6000;
