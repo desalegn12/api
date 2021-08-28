@@ -23,13 +23,12 @@ exports.register = asyncHandler(async (req, res, next) => {
 
 exports.login = asyncHandler(async (req, res, next) => {
 	const { email, password } = await req.body;
-
+	const User = await UserSchema.findOne({ email }).select("+password");
 	if (!email || !password) {
 		return next(
 			new ErrorResponse("either your email or password is not found", 404)
 		);
 	} else {
-		const User = await UserSchema.findOne({ email }).select("+password");
 		if (!User.email || !User.password) {
 			return next(
 				new ErrorResponse(
@@ -38,8 +37,11 @@ exports.login = asyncHandler(async (req, res, next) => {
 				)
 			);
 		}
+
+		const token = User.getSignedWebToken();
 		res.status(200).json({
 			success: true,
+			token,
 			User,
 		});
 	}
@@ -59,3 +61,11 @@ const sendTokenResponse = (user, statusCode, res) => {
 		token,
 	});
 };
+
+exports.getUser = asyncHandler(async (req, res, next) => {
+	const user = await UserSchema.findById(req.user.id);
+	res.status(200).json({
+		success: true,
+		user,
+	});
+});

@@ -14,11 +14,16 @@ const {
  */
 
 const router = express.Router();
+const { protect, authorize } = require("../middleWire/Auth");
 
-router.route("/").get(getData).post(createData);
+router.route("/").get(getData).post(protect, createData);
 
 //cause those request methods need the id of the data
-router.route("/:id").get(getSingleData).put(updateData).delete(deleteData);
-router.route("/:id/photo").put(photoUpload);
+router
+	.route("/:id")
+	.get(getSingleData)
+	.put(protect, authorize("user"), updateData)
+	.delete(protect, authorize("user"), deleteData);
+router.route("/:id/photo").put(protect, photoUpload);
 
 module.exports = router;
