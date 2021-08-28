@@ -8,9 +8,10 @@ const morgan = require("morgan");
 
 const mongoDB = require("./config/db");
 const Router = require("./router/routs");
+const AuthRouter = require("./router/Auth");
 const error = require("./middleWire/errorHandler");
 const photoUpload = require("express-fileupload");
-
+const cookieParser = require("cookie-parser");
 dotenv.config({ path: "./config/config.env" });
 
 const app = express();
@@ -25,6 +26,8 @@ if (process.env.NODE_ENV === "development") {
 mongoDB();
 app.use(photoUpload());
 app.use(logger);
+app.use(cookieParser());
+app.use("/api/v/coming/auth", AuthRouter);
 app.use("/api/v/coming", Router); //because after this one is excuted then request response cycle is ended
 /**based on this every middleware functions called before the route
  * and error middleware after them cause, the request response cycle is not end up if there is error  */
