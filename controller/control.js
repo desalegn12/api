@@ -1,6 +1,8 @@
 const modelSchema = require("../model/DatabaseSchema");
 const ErrorResponse = require("../util/errorResponse");
 const asyncHandler = require("../middleWire/async");
+const DatabaseSchema = require("../model/DatabaseSchema");
+const { publicDecrypt } = require("node:crypto");
 
 // const data = JSON.parse(body);
 
@@ -69,6 +71,18 @@ exports.getSingleData = asyncHandler(async (req, res, next) => {
 	});
 });
 exports.createData = asyncHandler(async (req, res, next) => {
+	req.body.user = req.user.id;
+	//find out the user for publish the database
+	const publishDSchema = DatabaseSchema.findOne({ user: req.user.id });
+
+	if (publishDSchema && req.user.role !== "publisher") {
+		return next(
+			new ErrorResponse(
+				`the user with an ID:${req.user.id} has already published or role of user must be a user`
+			)
+		);
+	}
+
 	const dataToDatabase = await modelSchema.create(req.body);
 	res.status(201).json({
 		success: true,
@@ -76,8 +90,18 @@ exports.createData = asyncHandler(async (req, res, next) => {
 	});
 });
 exports.updateData = asyncHandler(async (req, res, next) => {
+	const publishDSchema = DatabaseSchema.findOne({ user: req.user.id });
+
+	if (publishDSchema && req.user.role !== "publisher") {
+		return next(
+			new ErrorResponse(
+				`the user with an ID:${req.user.id} has not permission to do this`
+			)
+		);
+	}
+
 	const updateData = await modelSchema.findByIdAndUpdate(
-		req.params.id,
+		req.user.id,
 		req.body,
 		{
 			new: true,
@@ -86,7 +110,7 @@ exports.updateData = asyncHandler(async (req, res, next) => {
 	);
 	if (!updateData) {
 		return new ErrorResponse(
-			`there is no data in the in this id:${req.params.id}`,
+			`the requested id ${req.user.id}has not permission to update the document`,
 			404
 		);
 	}
@@ -98,18 +122,24 @@ exports.updateData = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteData = asyncHandler(async (req, res, next) => {
-	const deleteData = await modelSchema.findByIdAndDelete(req.params.id);
-	if (!deleteData) {
+	const publishDSchema = await DatabaseSchema.findOne({ user: req.user.id });
+	console.log(`to test the document requested by user id ${publishDSchema}`);
+	if (publishDSchema && req.user.role !== "publisher") {
 		return next(
 			new ErrorResponse(
-				`there is no data in the in this id:${req.params.id}`,
-				404
+				`the user with an ID:${req.user.id} has not permission to update the document`
 			)
 		);
 	}
-	res.status({
+	const deleteData = await modelSchema.findOneAndDelete(req.user.id);
+	if (!deleteData) {
+		return next(
+			new ErrorResponse(`there is no the requested user id:${req.user.id}`, 404)
+		);
+	}
+	res.status(200).json({
 		success: true,
-		data: {},
+		deleteData: {},
 	});
 });
 
@@ -143,3 +173,9 @@ exports.photoUpload = asyncHandler(async (req, res, next) => {
 });
 
 exports.findByQuery = asyncHandler(async (req, res, next) => {});
+/**
+ * therefore the user's id could be found
+ * under the token, req.user user the token and change it to
+ * the id of the user then user id associated with the db id, that is right
+ *
+ */

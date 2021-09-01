@@ -2,6 +2,7 @@ const dataModel = require("./model/DatabaseSchema");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const colors = require("colors");
+const User = require("./model/User");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -23,7 +24,7 @@ const importData = async () => {
 
 	try {
 		await dataModel.create(body);
-		console.log(`data imported..`.green.reverse);
+		console.log(`data imported..`.green);
 	} catch (err) {
 		console.error(err);
 	}
@@ -34,7 +35,7 @@ const importData = async () => {
 const deleteData = async () => {
 	try {
 		await dataModel.deleteMany({});
-		console.log(`the database data is all deleted`.red.reverse);
+		console.log(`the database data is all deleted`.red);
 	} catch (err) {
 		console.error(err);
 	}
@@ -42,8 +43,30 @@ const deleteData = async () => {
 	process.exit(1);
 };
 
+const deleteUser = async () => {
+	try {
+		await User.deleteMany({});
+		console.log(`all the users are deleted `.red.italic);
+	} catch (err) {
+		console.error(err);
+	}
+	process.exit(1);
+};
+const findAllUser = async () => {
+	try {
+		const users = await User.find();
+		console.log("finding all the user!".green.bold);
+		console.log(users);
+	} catch (err) {
+		console.error(err);
+	}
+};
 if (process.argv[2] === "-i") {
 	importData();
 } else if (process.argv[2] === "-d") {
 	deleteData();
+} else if (process.argv[2] === "-ud") {
+	deleteUser();
+} else if (process.argv[2] === "-f") {
+	findAllUser();
 }

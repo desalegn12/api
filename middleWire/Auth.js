@@ -37,7 +37,7 @@ exports.authorize = (...roles) => {
 		if (!roles.includes(req.user.role)) {
 			return next(
 				new ErrorResponse(
-					`this role is not authorized to do this, role${req.user.role}`,
+					`the user is not authorized use, in terms of role${req.user.role}`,
 					403
 				)
 			);

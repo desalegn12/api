@@ -22,8 +22,8 @@ router.route("/").get(getData).post(protect, createData);
 router
 	.route("/:id")
 	.get(getSingleData)
-	.put(protect, authorize("user"), updateData)
-	.delete(protect, authorize("user"), deleteData);
+	.put(protect, authorize("publisher"), updateData)
+	.delete(protect, authorize("publisher"), deleteData);
 router.route("/:id/photo").put(protect, photoUpload);
 
 module.exports = router;

@@ -44,10 +44,16 @@ const DatabaseModelSchema = new mongoose.Schema({
 			"please input a valid email address",
 		],
 	},
-	salary: {
+	salary : {
 		type: Number,
 		required: true,
 	},
+	user:{
+		type:mongoose.Schema.ObjectId,
+		ref:'userSchema',
+		required:true,
+	}
+
 });
 
 //to find the avg of the salary
