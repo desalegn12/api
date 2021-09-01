@@ -26,9 +26,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
 		next();
 	} catch (err) {
-		return next(
-			new ErrorResponse("there is no user registered with this route", 401)
-		);
+		return next(new ErrorResponse("couldn't get the token right this", 401));
 	}
 });
 

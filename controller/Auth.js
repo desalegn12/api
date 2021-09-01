@@ -2,6 +2,8 @@ const UserSchema = require("../model/User");
 const ErrorResponse = require("../util/errorResponse");
 const asyncHandler = require("../middleWire/async");
 const sendEmail = require("../util/sendEmail");
+const crypto = require("crypto");
+const { use } = require("../router/Auth");
 
 //api/v/coming/auth/register
 exports.register = asyncHandler(async (req, res, next) => {
@@ -96,6 +98,60 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
 		return next(new ErrorResponse("the email could not be sent", 500));
 	}
 
+	// res.status(200).json({
+	// 	success: true,
+	// 	user,
+	// });
+});
+
+/**
+ * update the user details
+ *
+ */
+exports.updateUserDetails = asyncHandler(async (req, res, next) => {
+	// const fieldsUpdate = {
+	// 	name: req.body.name,
+	// 	email: req.body.email,
+	// };
+	const user = UserSchema.findByIdAndUpdate(req.user.id, req.body, {
+		new: true,
+		runValidators: true,
+	});
+	if (!user) {
+		return next(
+			new ErrorResponse("could not find the user with the requested id ", 404)
+		);
+	}
+	res.status(200).json({
+		success: true,
+		data: user,
+	});
+});
+
+/**
+ * @ put request
+ * the request parm is the token
+ *
+ */
+
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+	const passwordResetToken = crypto
+		.createHash("sha256")
+		.update(req.params.resetToken)
+		.digest("hex");
+
+	const user = UserSchema.findOne({
+		resetPasswordToken,
+		resetPasswordExpire: { $gt: Date.now() },
+	});
+	if (!user) {
+		return next(new ErrorResponse("invalid password reset token", 400));
+	}
+	user.password = req.body.password;
+	user.resetPasswordToken = undefined;
+	user.resetPasswordExpire = undefined;
+	await user.save();
+	sendTokenResponse(user, 200, res);
 	res.status(200).json({
 		success: true,
 		user,
