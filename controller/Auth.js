@@ -3,7 +3,6 @@ const ErrorResponse = require("../util/errorResponse");
 const asyncHandler = require("../middleWire/async");
 const sendEmail = require("../util/sendEmail");
 const crypto = require("crypto");
-const { use } = require("../router/Auth");
 
 //api/v/coming/auth/register
 exports.register = asyncHandler(async (req, res, next) => {
@@ -109,11 +108,11 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
  *
  */
 exports.updateUserDetails = asyncHandler(async (req, res, next) => {
-	// const fieldsUpdate = {
-	// 	name: req.body.name,
-	// 	email: req.body.email,
-	// };
-	const user = UserSchema.findByIdAndUpdate(req.user.id, req.body, {
+	const fieldsUpdate = {
+		name: req.body.name,
+		email: req.body.email,
+	};
+	const user = UserSchema.findByIdAndUpdate(req.user.id, fieldsUpdate, {
 		new: true,
 		runValidators: true,
 	});
@@ -124,7 +123,7 @@ exports.updateUserDetails = asyncHandler(async (req, res, next) => {
 	}
 	res.status(200).json({
 		success: true,
-		data: user,
+		user,
 	});
 });
 

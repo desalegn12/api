@@ -1,4 +1,3 @@
-const modelSchema = require("../model/DatabaseSchema");
 const ErrorResponse = require("../util/errorResponse");
 const asyncHandler = require("../middleWire/async");
 const DatabaseSchema = require("../model/DatabaseSchema");
@@ -16,7 +15,7 @@ exports.getData = asyncHandler(async (req, res, next) => {
 		/\b(gt|gte|lt|lte|in)\b/g,
 		(match) => `$${match}`
 	);
-	let query = modelSchema.find(JSON.parse(querySrt));
+	let query = DatabaseSchema.find(JSON.parse(querySrt));
 	if (req.query.select) {
 		const fields = req.query.select.split(",").join(" ");
 		//this one is what the select statement of sql database
@@ -31,7 +30,7 @@ exports.getData = asyncHandler(async (req, res, next) => {
 	const limit = parseInt(req.query.limit, 10) || 100;
 	const startIndex = (page - 1) * limit; //how much data is shown per page
 	const endIndex = page * limit;
-	const total = await modelSchema.countDocuments();
+	const total = await DatabaseSchema.countDocuments();
 
 	query = query.skip(startIndex).limit(limit);
 
@@ -60,7 +59,7 @@ exports.getData = asyncHandler(async (req, res, next) => {
 
 //finally am realize that the variable we want to use in this field must be unique
 exports.getSingleData = asyncHandler(async (req, res, next) => {
-	const getASingleData = await modelSchema.findById(req.params.id);
+	const getASingleData = await DatabaseSchema.findById(req.params.id);
 	if (!getASingleData) {
 		return res.status(400).json({ success: false });
 	}
@@ -82,7 +81,7 @@ exports.createData = asyncHandler(async (req, res, next) => {
 		);
 	}
 
-	const dataToDatabase = await modelSchema.create(req.body);
+	const dataToDatabase = await DatabaseSchema.create(req.body);
 	res.status(201).json({
 		success: true,
 		data: dataToDatabase,
@@ -99,7 +98,7 @@ exports.updateData = asyncHandler(async (req, res, next) => {
 		);
 	}
 
-	const updateData = await modelSchema.findByIdAndUpdate(
+	const updateData = await DatabaseSchema.findByIdAndUpdate(
 		req.user.id,
 		req.body,
 		{
@@ -130,7 +129,7 @@ exports.deleteData = asyncHandler(async (req, res, next) => {
 			)
 		);
 	}
-	const deleteData = await modelSchema.findOneAndDelete(req.user.id);
+	const deleteData = await DatabaseSchema.findOneAndDelete(req.user.id);
 	if (!deleteData) {
 		return next(
 			new ErrorResponse(`there is no the requested user id:${req.user.id}`, 404)
@@ -143,7 +142,7 @@ exports.deleteData = asyncHandler(async (req, res, next) => {
 });
 
 exports.photoUpload = asyncHandler(async (req, res, next) => {
-	const photo = await modelSchema.findById(req.params.id);
+	const photo = await DatabaseSchema.findById(req.params.id);
 
 	if (!photo) {
 		return next(new ErrorResponse("photo uploaded is not found ", 404));
@@ -163,8 +162,8 @@ exports.photoUpload = asyncHandler(async (req, res, next) => {
 		);
 	}
 	const name = req.files.photo.naming;
-	naming = `photo_${modelSchema.name}`;
-	console.log(modelSchema._id);
+	naming = `photo_${DatabaseSchema.name}`;
+	console.log(DatabaseSchema._id);
 	res.status(200).json({
 		success: true,
 		data: req.files.photo,

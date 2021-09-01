@@ -16,7 +16,10 @@ const {
 const router = express.Router();
 const { protect, authorize } = require("../middleWire/Auth");
 
-router.route("/").get(getData).post(protect, createData);
+router
+	.route("/")
+	.get(getData)
+	.post(protect, authorize("publisher"), createData);
 
 //cause those request methods need the id of the data
 router

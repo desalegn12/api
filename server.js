@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const mongoDB = require("./config/db");
 const Router = require("./router/routs");
 const AuthRouter = require("./router/Auth");
+const CourseRouter = require("./router/courseRouter");
 const error = require("./middleWire/errorHandler");
 const photoUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
@@ -27,6 +28,7 @@ mongoDB();
 app.use(photoUpload());
 app.use(logger);
 app.use(cookieParser());
+app.use("/api/vi/coming/course", CourseRouter);
 app.use("/api/v/coming/auth", AuthRouter);
 app.use("/api/v/coming", Router); //because after this one is excuted then request response cycle is ended
 /**based on this every middleware functions called before the route

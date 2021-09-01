@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const colors = require("colors");
 const User = require("./model/User");
+const Course = require("./model/Course");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -61,6 +62,21 @@ const findAllUser = async () => {
 		console.error(err);
 	}
 };
+
+const addCourse = async () => {
+	const data = {
+		title: "javascript",
+		description: "js for web development",
+		weeks: 6,
+		databaseSchema: "612fd29268940d5f2e8e19e1",
+	};
+	try {
+		await Course.create(data);
+		console.log("courses are added".green);
+	} catch (err) {
+		console.log(`${err}`.red);
+	}
+};
 if (process.argv[2] === "-i") {
 	importData();
 } else if (process.argv[2] === "-d") {
@@ -69,4 +85,6 @@ if (process.argv[2] === "-i") {
 	deleteUser();
 } else if (process.argv[2] === "-f") {
 	findAllUser();
+} else if (process.argv[2] === "-ac") {
+	addCourse();
 }
