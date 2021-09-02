@@ -32,7 +32,7 @@ const CourseSchema = new mongoose.Schema({
 	//model which is referenced
 	databaseSchema: {
 		type: mongoose.Schema.ObjectId,
-		ref: "DatabaseModelSchema", //because only the database schema reference is important to link the models
+		ref: "Collection", //because only the database schema reference is important to link the models
 		required: true,
 	},
 });

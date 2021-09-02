@@ -15,7 +15,7 @@ exports.getData = asyncHandler(async (req, res, next) => {
 		/\b(gt|gte|lt|lte|in)\b/g,
 		(match) => `$${match}`
 	);
-	let query = DatabaseSchema.find(JSON.parse(querySrt));
+	let query = DatabaseSchema.find(JSON.parse(querySrt)).populate("courses");
 	if (req.query.select) {
 		const fields = req.query.select.split(",").join(" ");
 		//this one is what the select statement of sql database
@@ -129,12 +129,14 @@ exports.deleteData = asyncHandler(async (req, res, next) => {
 			)
 		);
 	}
-	const deleteData = await DatabaseSchema.findOneAndDelete(req.user.id);
+	const deleteData = await DatabaseSchema.findById(req.user.id);
 	if (!deleteData) {
 		return next(
 			new ErrorResponse(`there is no the requested user id:${req.user.id}`, 404)
 		);
 	}
+	deleteData.remove(); //the remove middleware function is called here
+
 	res.status(200).json({
 		success: true,
 		deleteData: {},

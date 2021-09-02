@@ -9,8 +9,6 @@ dotenv.config({ path: "./config/config.env" });
 
 mongoose.connect(process.env.MONGO_URL, {
 	useNewUrlParser: true,
-	useCreateIndex: true,
-	useFindAndModify: false,
 	useUnifiedTopology: true,
 });
 
@@ -23,8 +21,17 @@ const importData = async () => {
 		salary: 2000,
 	};
 
+	const anOtherBody = {
+		name: "on other body name of data",
+		description: "on other description of data",
+		address: "Addis Ababa, Ethiopia",
+		email: "onOther@gmail.com",
+		salary: 5000,
+		user: "612f6c130221a826db11b139",
+	};
+
 	try {
-		await dataModel.create(body);
+		await dataModel.create(anOtherBody);
 		console.log(`data imported..`.green);
 	} catch (err) {
 		console.error(err);
