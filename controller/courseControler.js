@@ -11,7 +11,9 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
 	let query;
 
 	if (req.params.databaseSchemaId) {
-		query = CourseSchema.find({ databaseSchema: req.params.databaseSchemaId });
+		query = CourseSchema.find({
+			databaseSchema: req.params.databaseSchemaId,
+		});
 	} else {
 		query = CourseSchema.find(); //find all data in the database
 	}

@@ -28,7 +28,8 @@ mongoDB();
 app.use(photoUpload());
 app.use(logger);
 app.use(cookieParser());
-app.use("/api/vi/coming/course", CourseRouter);
+app.use("/api/v/coming/course", CourseRouter);
+app.use("/api/v/coming/:databaseSchema/course", CourseRouter);
 app.use("/api/v/coming/auth", AuthRouter);
 app.use("/api/v/coming", Router); //because after this one is excuted then request response cycle is ended
 /**based on this every middleware functions called before the route
