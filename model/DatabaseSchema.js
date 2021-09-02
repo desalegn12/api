@@ -61,34 +61,6 @@ const DatabaseModelSchema = new mongoose.Schema(
 	}
 );
 
-//to find the avg of the salary
-
-/**
- * that is aggregation
- */
-// DatabaseModelSchema.static.averageSalary= async function(objectId){
-// 	/**
-// 	 * this is only for calculate the average salary
-// 	 */
-// 	console.log('Calculating the average id..'.blue);
-// 	const obj=await this.aggregate([
-// 		{
-// 			$match:{
-//                salary:objectId
-// 			}
-// 		},
-// 		{
-// 			$group:{
-//              _id:'$salary',
-// 			 averageSalary:{$avg:'$salary'}
-// 			}
-// 		}
-// 	])
-
-// }
-
-//the below is the slugify, doing only in the post request cause it is pre meaning before save into the database
-
 DatabaseModelSchema.pre("save", async function (next) {
 	this.slug = slugify(this.name, {
 		lower: true, //this makes sense, cause before save the document, it changes to the lowercase right

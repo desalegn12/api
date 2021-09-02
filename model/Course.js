@@ -10,6 +10,10 @@ const CourseSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "please describe the course"],
 	},
+	tuition: {
+		type: Number,
+		required: [true, "please add the tuition of the course"],
+	},
 
 	weeks: {
 		type: Number,
@@ -37,8 +41,34 @@ const CourseSchema = new mongoose.Schema({
 	},
 });
 
-/**
- * export the model and its collection name
- */
+CourseSchema.static.averageTuition = async function (databaseSchemaId) {
+	/**
+	 * this is only for calculate the average salary
+	 */
+	console.log("Calculating the average id..".blue);
+	const obj = await this.aggregate([
+		{
+			$match: {
+				databaseSchema: databaseSchemaId,
+			},
+		},
+		{
+			$group: {
+				_id: "$databaseSchema", //this is the relational one
+				averageTuition: { $avg: "$tuition" },
+			},
+		},
+	]);
+
+	console.log(obj); //this one is checking wether the given static method is working or not
+};
+
+CourseSchema.post("save", function () {
+	this.constructor.averageTuition(this.databaseSchema);
+});
+
+CourseSchema.pre("remove", function () {
+	this.constructor.averageTuition(this.databaseSchema);
+});
 
 module.exports = mongoose.model("courses", CourseSchema);
