@@ -39,14 +39,21 @@ const userSchema = mongoose.Schema({
 userSchema.pre("save", async function (next) {
 	if (!this.isModified("password")) {
 		next();
-		//it means move to the next don't return back as long as the password field isn't modified
+		
 	}
 
-	const salt = await bcrypt.genSalt(10); //this is hashing algorithm that makes our password become hashed
-	this.password = await bcrypt.hash(this.password, salt); //this hashing is passing here for password encryption
+	const salt = await bcrypt.genSalt(10); 
+	this.password = await bcrypt.hash(this.password, salt); 
 
 	next();
 });
+
+
+userSchema.methods.getSignedJsonWebToken=function(){
+	return jwt.sign({id:this._id},process.env.SIGN_IN_WEB_SECTRATE,{expiresIn:process.env.EXPIRE_TIME
+
+	})
+}
 
 userSchema.methods.getSignedWebToken = function () {
 	return jwt.sign({ id: this._id }, process.env.SIGN_IN_WEB_SECTRATE, {

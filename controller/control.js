@@ -6,55 +6,7 @@ const DatabaseSchema = require("../model/DatabaseSchema");
 
 //they are so called middleware functions
 exports.getData = asyncHandler(async (req, res, next) => {
-	const requestQuery = { ...req.query };
-	const removeParams = ["select", "sort", "page", "limit"];
-	removeParams.forEach((params) => delete requestQuery[params]);
-	console.log(requestQuery);
-	let querySrt = JSON.stringify(requestQuery);
-	querySrt = querySrt.replace(
-		/\b(gt|gte|lt|lte|in)\b/g,
-		(match) => `$${match}`
-	);
-	let query = DatabaseSchema.find(JSON.parse(querySrt)).populate("courses");
-	if (req.query.select) {
-		const fields = req.query.select.split(",").join(" ");
-		//this one is what the select statement of sql database
-		query = query.select(fields);
-		// console.log(query);
-	}
-	if (req.query.sort) {
-		const sortBy = req.query.sort.split(",").join(" ");
-		query = query.sort(sortBy);
-	}
-	const page = parseInt(req.query.page, 10) || 1;
-	const limit = parseInt(req.query.limit, 10) || 100;
-	const startIndex = (page - 1) * limit; //how much data is shown per page
-	const endIndex = page * limit;
-	const total = await DatabaseSchema.countDocuments();
-
-	query = query.skip(startIndex).limit(limit);
-
-	const data = await query;
-	const pagination = {};
-	if (endIndex < total) {
-		pagination.next = {
-			page: page + 1,
-			limit,
-		};
-	}
-	if (startIndex > 0) {
-		pagination.next = {
-			page: page - 1,
-			limit,
-		};
-	}
-
-	res.status(200).json({
-		success: true,
-		pagination,
-		count: data.length,
-		data,
-	});
+	res.status(200).json(res.advancedRoutes);
 });
 
 //finally am realize that the variable we want to use in this field must be unique

@@ -9,6 +9,9 @@ const {
 	photoUpload,
 } = require("../controller/control");
 
+const advancedResult = require("../middleWire/advancedRouts");
+const databaseSchema = require("../model/DatabaseSchema");
+
 /**
  * we can bind the router path under this router.use('rout ', and binding object)
  */
@@ -18,7 +21,7 @@ const { protect, authorize } = require("../middleWire/Auth");
 
 router
 	.route("/")
-	.get(getData)
+	.get(advancedResult(databaseSchema, "courses"), getData)
 	.post(protect, authorize("publisher"), createData);
 
 //cause those request methods need the id of the data
