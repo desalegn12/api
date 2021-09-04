@@ -1,5 +1,5 @@
 const ErrorResponse = require("../util/errorResponse");
-const asyncHandler = require("../middleWire/async");
+const asyncHandler = require("../middleWare/async");
 const DatabaseSchema = require("../model/DatabaseSchema");
 
 // const data = JSON.parse(body);

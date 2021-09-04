@@ -1,7 +1,7 @@
 const UserSchema = require("../model/User");
 const ErrorResponse = require("../util/errorResponse");
-const asyncHandler = require("../middleWire/async");
-const errorHandler = require("../middleWire/errorHandler");
+const asyncHandler = require("../middleWare/async");
+const errorHandler = require("../middleWare/errorHandler");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
 	res.status(200).json(res.advancedRoutes); //any selection is working here

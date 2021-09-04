@@ -1,5 +1,5 @@
 const express = require("express");
-const advancedResult = require("../middleWire/advancedRouts");
+const advancedResult = require("../middleWare/advancedRouts");
 const User = require("../model/User");
 
 const {

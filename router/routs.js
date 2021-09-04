@@ -9,7 +9,7 @@ const {
 	photoUpload,
 } = require("../controller/control");
 
-const advancedResult = require("../middleWire/advancedRouts");
+const advancedResult = require("../middleWare/advancedRouts");
 const databaseSchema = require("../model/DatabaseSchema");
 
 /**
@@ -17,7 +17,7 @@ const databaseSchema = require("../model/DatabaseSchema");
  */
 
 const router = express.Router();
-const { protect, authorize } = require("../middleWire/Auth");
+const { protect, authorize } = require("../middleWare/Auth");
 
 router
 	.route("/")

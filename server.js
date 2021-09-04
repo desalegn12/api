@@ -3,14 +3,14 @@ const colors = require("colors");
 //environment variable calling though this library
 const dotenv = require("dotenv");
 //this is mounting the path if they are builtin they needs not mount the path right
-const logger = require("./middleWire/logger");
+const logger = require("./middleWare/logger");
 const morgan = require("morgan");
 const userRoute = require("./router/Users");
 const mongoDB = require("./config/db");
 const Router = require("./router/routs");
 const AuthRouter = require("./router/Auth");
 const CourseRouter = require("./router/courseRouter");
-const error = require("./middleWire/errorHandler");
+const error = require("./middleWare/errorHandler");
 const photoUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 dotenv.config({ path: "./config/config.env" });

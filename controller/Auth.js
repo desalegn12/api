@@ -1,6 +1,6 @@
 const UserSchema = require("../model/User");
 const ErrorResponse = require("../util/errorResponse");
-const asyncHandler = require("../middleWire/async");
+const asyncHandler = require("../middleWare/async");
 const sendEmail = require("../util/sendEmail");
 const crypto = require("crypto");
 

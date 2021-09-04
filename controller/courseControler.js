@@ -1,5 +1,5 @@
 const ErrorResponse = require("../util/errorResponse");
-const asyncHandler = require("../middleWire/async");
+const asyncHandler = require("../middleWare/async");
 const CourseSchema = require("../model/Course");
 const DatabaseSchema = require("../model/DatabaseSchema");
 
