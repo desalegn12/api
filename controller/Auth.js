@@ -6,13 +6,12 @@ const crypto = require("crypto");
 
 //api/v/coming/auth/register
 exports.register = asyncHandler(async (req, res, next) => {
-	const { name, email, password, role } = req.body;
-
-	//so now create a user
-	/**
-	 * the data is coming from the request .body but
-	 * we wanna get the data from the user right
+	const { name, email, password, role } = req.body; /**
+	 * the destructuring written as {
+		 name:name,email:email,password:password,role:role
+	 }
 	 */
+	//the above one is destructuring
 	const user = await UserSchema.create({
 		name,
 		email,
@@ -64,9 +63,9 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
 			new ErrorResponse(`there is no user with this email ${req.body.email}`)
 		);
 	}
-
+	//this one is the method in the userSchema
 	const resetToken = user.getResetPasswordToken();
-
+	//this one is the static called under the schema save flag, under the pre static
 	await user.save({ validateBeforeSave: false });
 
 	//configure the reset url

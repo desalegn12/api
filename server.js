@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 //this is mounting the path if they are builtin they needs not mount the path right
 const logger = require("./middleWire/logger");
 const morgan = require("morgan");
-
+const userRoute = require("./router/Users");
 const mongoDB = require("./config/db");
 const Router = require("./router/routs");
 const AuthRouter = require("./router/Auth");
@@ -28,6 +28,7 @@ mongoDB();
 app.use(photoUpload());
 app.use(logger);
 app.use(cookieParser());
+app.use("/api/v/coming/auth/user", userRoute);
 app.use("/api/v/coming/course", CourseRouter);
 app.use("/api/v/coming/:databaseSchemaId/course", CourseRouter);
 app.use("/api/v/coming/auth", AuthRouter);
@@ -36,7 +37,7 @@ app.use("/api/v/coming", Router); //because after this one is excuted then reque
  * and error middleware after them cause, the request response cycle is not end up if there is error  */
 app.use(error);
 
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
 	console.log(`the app is listening on the ${PORT}`.green.bold);
