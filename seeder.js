@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const colors = require("colors");
 const User = require("./model/User");
 const Course = require("./model/Course");
-
+const Comment = require("./model/Comments");
 dotenv.config({ path: "./config/config.env" });
 
 mongoose.connect(process.env.MONGO_URL, {
@@ -31,6 +31,12 @@ const importData = async () => {
 	};
 
 	try {
+		//first make validation here and then send the data to the database
+		/**
+		 * the point i want to say this the validation is already done over the model the
+		 * after i import the model and validate the form data the make the request to add the data in to the database
+		 * that is why this one is the entry pont of both the front and backend
+		 */
 		await dataModel.create(anOtherBody);
 		console.log(`data imported..`.green);
 	} catch (err) {
@@ -44,6 +50,17 @@ const deleteData = async () => {
 	try {
 		await dataModel.deleteMany({});
 		console.log(`the database data is all deleted`.red);
+	} catch (err) {
+		console.error(err);
+	}
+
+	process.exit(1);
+};
+
+const deleteAllComment = async () => {
+	try {
+		await Comment.deleteMany({});
+		console.log(`all comments are deleted `.red);
 	} catch (err) {
 		console.error(err);
 	}
@@ -94,4 +111,6 @@ if (process.argv[2] === "-i") {
 	findAllUser();
 } else if (process.argv[2] === "-ac") {
 	addCourse();
+} else if (process.argv[2] === "-dc") {
+	deleteAllComment();
 }

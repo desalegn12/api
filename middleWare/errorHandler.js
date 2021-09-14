@@ -6,7 +6,7 @@ const errorHandler = (err, req, res, next) => {
 	console.log(err);
 
 	if (err.name === "CastError") {
-		const message = `there is no data in the in this id:${err.value}`;
+		const message = `there is no data in this id:${err.value}`;
 
 		error = new ErrorResponse(message, 404);
 	}

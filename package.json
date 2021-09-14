@@ -1,0 +1,26 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "front back integration",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "back": "nodemon server.js",
+    "front": "npm start --prefix frontEnd",
+    "dev": "concurrently \"npm run back\" \"npm run front\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/desalegn12/template_for_backend.git"
+  },
+  "author": "desalegn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/desalegn12/template_for_backend/issues"
+  },
+  "homepage": "https://github.com/desalegn12/template_for_backend#readme",
+  "dependencies": {
+    "concurrently": "^6.2.1",
+    "cors": "^2.8.5"
+  }
+}

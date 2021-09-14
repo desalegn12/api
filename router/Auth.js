@@ -11,6 +11,7 @@ const {
 const { protect } = require("../middleWare/Auth");
 
 const router = express.Router();
+//protect is used for decoding the user snd find the user's information
 
 router.post("/register", register);
 router.route("/login").post(login);

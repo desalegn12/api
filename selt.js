@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
+const { find } = require("./model/User");
 
 const Salt = async () => {
+	//this inside function waiting sometime to execute this genSalt function sot the Salt function wait for
 	const salt = await bcrypt.genSalt(103);
 
 	console.log(salt);
@@ -13,22 +15,18 @@ const printSalt = (salt) => {
 
 printSalt(Salt);
 
-//this function needs enough time to hash the password
-const hasPrinter = () =>
-	bcrypt.genSalt(20, function (err, salt) {
-		if (err) {
-			throw err;
-		} else {
-			bcrypt.hash("DBpassword", salt, function (err, result) {
-				if (err) {
-					throw err;
-				} else {
-					console.log(`the result of the hash function is hash=${result}`);
-				}
-			});
-		}
-	});
-hasPrinter();
+
+this function needs enough time to hash the password
+const hashPrinter = async (password) => {
+	const salt = await bcrypt.genSalt(20);
+	const hash = await bcrypt.hash(password, salt);
+	console.log(hash);
+};
+
+console.log("before hash");
+hashPrinter("thisOne");
+hashPrinter("thisOne");
+console.log("after hash");
 
 const encryption = async () => {
 	const salt = await bcrypt.genSalt(90);
@@ -42,6 +40,7 @@ const encryption = async () => {
 		}
 	);
 	console.log(compare());
+
 	console.log(hash());
 };
 

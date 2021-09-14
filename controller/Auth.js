@@ -6,46 +6,42 @@ const crypto = require("crypto");
 
 //api/v/coming/auth/register
 exports.register = asyncHandler(async (req, res, next) => {
-	const { name, email, password, role } = req.body; /**
-	 * the destructuring written as {
-		 name:name,email:email,password:password,role:role
-	 }
-	 */
-	//the above one is destructuring
+	const { name, email, password, role } = req.body;
+
 	const user = await UserSchema.create({
 		name,
 		email,
 		password,
 		role,
 	});
-
-	sendTokenResponse(user, 200, res);
+	/**because the token needs to be generated when the user login or register
+	 * after the user try that the token be container of the userId, that is way we have to verify the user try to  log or register
+	 *
+	 */
+	sendTokenResponse(user, 200, req, res);
 });
 
 exports.login = asyncHandler(async (req, res, next) => {
 	const { email, password } = await req.body;
-	const User = await UserSchema.findOne({ email }).select("+password");
+	const user = await UserSchema.findOne({ email }).select("+password");
 	if (!email || !password) {
 		return next(
 			new ErrorResponse("either your email or password is not found", 404)
 		);
-	} else {
-		if (!User.email || !User.password) {
-			return next(
-				new ErrorResponse(
-					"either the password or the emil is not found in database",
-					404
-				)
-			);
-		}
-
-		const token = User.getSignedWebToken();
-		res.status(200).json({
-			success: true,
-			token,
-			User,
-		});
 	}
+
+	const isMatch = await user.matchPassword(password);
+	if (!isMatch) {
+		return next(
+			new ErrorResponse(
+				"either the password or the email is not match to registered user",
+				404
+			)
+		);
+	}
+	// const token = user.getSignedWebToken(); //find user by the login userId and
+	// localStorage.setItem("token", token); // this one also send the token to the local storage
+	sendTokenResponse(user, 200, req, res); //this one send the cookie
 });
 
 exports.getUser = asyncHandler(async (req, res, next) => {
@@ -160,11 +156,11 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
  * just it is the helper function we put it in the very bottom
  *
  */
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, req, res) => {
 	const token = user.getSignedWebToken();
 	const options = {
 		expires: new Date(
-			Date.now + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+			Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000
 		),
 		httpOnly: true,
 	};
@@ -173,4 +169,6 @@ const sendTokenResponse = (user, statusCode, res) => {
 		success: true,
 		token,
 	});
+
+	//this one is the main focus of today or now
 };

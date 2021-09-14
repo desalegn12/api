@@ -5,32 +5,26 @@ const UserSchema = require("../model/User");
 
 exports.protect = asyncHandler(async (req, res, next) => {
 	let token;
-	if (
-		req.headers.authorization &&
-		req.headers.authorization.startsWith("Bearer")
-	) {
-		token = req.headers.authorization.split(" ")[1];
+	if (req.headers["x-access-token"]) {
+		token = req.headers["x-access-token"];
 	} else if (!token) {
 		return next(
 			new ErrorResponse("no user is registered with this route", 401)
 		);
 	}
 	try {
-		//this decode gets the taken from time when the user is register in to the system
-		//because for security purpose
-		const decode = jwt.verify(token, process.env.SIGN_IN_WEB_SECTRATE); //we needs to pass the token and the secrete
-		console.log(decode);
-		req.user = await UserSchema.findById(decode.id);
-
-		console.log(req.user);
+		jwt.verify(token, process.env.SIGN_IN_WEB_SECTRATE, async (err, decode) => {
+			req.user = await UserSchema.findById(decode.id);
+		});
 
 		next();
 	} catch (err) {
 		return next(new ErrorResponse("couldn't get the token right this", 401));
 	}
 });
-
+//identify the role of the user
 exports.authorize = (...roles) => {
+	//the route which has this route before considers to be verify the user role first
 	return (req, res, next) => {
 		if (!roles.includes(req.user.role)) {
 			return next(

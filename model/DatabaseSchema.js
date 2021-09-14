@@ -51,7 +51,7 @@ const DatabaseModelSchema = new mongoose.Schema(
 		},
 		user: {
 			type: mongoose.Schema.ObjectId,
-			ref: "userSchema",
+			ref: "user",
 			required: true,
 		},
 	},
@@ -97,12 +97,8 @@ DatabaseModelSchema.pre("remove", async function () {
 DatabaseModelSchema.virtual("courses", {
 	ref: "courses",
 	localField: "_id",
-	foreignField: "databaseSchema",
+	foreignField: "databaseSchema", //reverse populate
 	justOne: false,
 });
 
-module.exports = mongoose.model("Collection", DatabaseModelSchema); //an essential part os this programming is assigning the collection for the enter data
-
-//the first argument indicates the collection in the database
-//this is what a model si work
-//show pagination
+module.exports = mongoose.model("Collection", DatabaseModelSchema);

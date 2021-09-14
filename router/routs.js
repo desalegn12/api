@@ -22,7 +22,7 @@ const { protect, authorize } = require("../middleWare/Auth");
 router
 	.route("/")
 	.get(advancedResult(databaseSchema, "courses"), getData)
-	.post(protect, authorize("publisher"), createData);
+	.post(protect, authorize("admin"), createData);
 
 //cause those request methods need the id of the data
 router
@@ -30,6 +30,6 @@ router
 	.get(getSingleData)
 	.put(protect, authorize("publisher"), updateData)
 	.delete(protect, authorize("publisher"), deleteData);
-router.route("/:id/photo").put(protect, photoUpload);
+router.route("/:id/photo").put(photoUpload);
 
 module.exports = router;

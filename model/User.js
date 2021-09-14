@@ -19,13 +19,13 @@ const userSchema = mongoose.Schema({
 	},
 	role: {
 		type: String,
-		enum: ["user", "publisher"],
+		enum: ["user", "admin"],
 		default: "user",
 	},
 	password: {
 		type: String,
 		required: [true, "please add the password"],
-		minlength: 6,
+		minlength: 8,
 		select: false,
 	},
 	resetPasswordToken: String,
@@ -39,21 +39,13 @@ const userSchema = mongoose.Schema({
 userSchema.pre("save", async function (next) {
 	if (!this.isModified("password")) {
 		next();
-		
 	}
 
-	const salt = await bcrypt.genSalt(10); 
-	this.password = await bcrypt.hash(this.password, salt); 
+	const salt = await bcrypt.genSalt(10);
+	this.password = await bcrypt.hash(this.password, salt);
 
 	next();
 });
-
-
-userSchema.methods.getSignedJsonWebToken=function(){
-	return jwt.sign({id:this._id},process.env.SIGN_IN_WEB_SECTRATE,{expiresIn:process.env.EXPIRE_TIME
-
-	})
-}
 
 userSchema.methods.getSignedWebToken = function () {
 	return jwt.sign({ id: this._id }, process.env.SIGN_IN_WEB_SECTRATE, {
@@ -61,6 +53,9 @@ userSchema.methods.getSignedWebToken = function () {
 	});
 };
 
+userSchema.methods.matchPassword = function (password) {
+	return bcrypt.compare(password, this.password);
+};
 userSchema.methods.getResetPasswordToken = function () {
 	//generate the password token
 	const passwordToken = crypto.randomBytes(20).toString("hex");
