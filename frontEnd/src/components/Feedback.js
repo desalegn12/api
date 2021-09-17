@@ -1,11 +1,21 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { Component } from "react";
 import backEndApi from "../service/api";
-
+import go from "./asset/direction_icon.ico";
+import {
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	Redirect,
+} from "react-router-dom";
+import "./components.css";
+import ReviewFeedback from "./Moderator";
+import Navbar from "./Navbar";
 class Feedback extends Component {
 	state = {
-		file: "",
+		pdfFile: null,
 		comment: "",
+		redirect: false,
 	};
 
 	onChange = (e) => {
@@ -13,50 +23,72 @@ class Feedback extends Component {
 			[e.target.name]: e.target.value,
 		});
 	};
-
-	jsonParse = (data) => {
-		return JSON.parse(data);
+	onChangeFileUpload = (e) => {
+		this.setState({
+			pdfFile: e.target.files[0],
+		});
+	};
+	onClick = () => {
+		this.setState({
+			redirect: !this.state.redirect,
+		});
 	};
 
 	onSubmit = async (e) => {
-		const { comment } = this.state;
-		const data = { comment };
-		console.log(data);
+		const { comment, pdfFile } = this.state;
+		const data = { comment, pdfFile };
+
 		e.preventDefault();
 		await backEndApi
 			.post("/api/v/coming/comment", data)
 			.then((data) => {
 				console.log(data);
+				this.setState({
+					comment: "",
+					pdfFile: "",
+				});
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-		this.setState({
-			name: "",
-			email: "",
-			password: "",
-		});
 	};
 
 	render() {
+		if (this.state.redirect) {
+			<Router>
+				<Switch>
+					<Redirect exact from="/feedback" to="/review" />
+					<Route path="/review">
+						<Navbar />
+						<ReviewFeedback />
+					</Route>
+				</Switch>
+			</Router>;
+		}
 		return (
-			<div className="container">
+			<div className="container ">
 				<div className="form-div">
-					<div style={{ textAlign: "center" }}>
-						<p className="h2 ">Give us your complain from the below field</p>
+					<div style={{ textAlign: "center", padding: "0 10%" }}>
+						<p
+							className="h2 "
+							style={{ fontFamily: '"Times New Roman, Times, serif"' }}>
+							{" "}
+							Give us your complaint from the below field
+						</p>
 					</div>
-					<form onSubmit={this.onSubmit} style={stylingContainer}>
+					<form
+						onSubmit={this.onSubmit}
+						className="stylingContainer height-feedback">
 						<div class="form-floating">
 							<textarea
 								type="text"
 								name="comment"
 								value={this.state.comment}
 								class="form-control"
-								placeholder="Leave a comment here"
 								onChange={this.onChange}
 								id="floatingTextarea2"
-								style={{ height: "200px" }}></textarea>
-							<label for="floatingTextarea2">Comments</label>
+								style={{ height: "250px" }}></textarea>
+							<label for="floatingTextarea2">leave the comment here.</label>
 						</div>
 						<div class="mb-3">
 							<label for="formFile" class="form-label">
@@ -64,10 +96,11 @@ class Feedback extends Component {
 							</label>
 							<input
 								class="form-control"
-								name="file"
-								value={this.state.file}
+								name="pdfFile"
+								onChange={this.onChangeFileUpload}
 								type="file"
 								id="formFile"
+								accept="application/pdf"
 							/>
 						</div>
 						<input
@@ -77,17 +110,17 @@ class Feedback extends Component {
 						/>
 					</form>
 				</div>
+				<div>
+					<img
+						src={go}
+						alt="not found"
+						className="directed-image"
+						onClick={this.onClick}
+					/>
+				</div>
 			</div>
 		);
 	}
 }
 
-const stylingContainer = {
-	padding: "0 10%",
-	height: "400px",
-	display: "flex",
-	flexDirection: "column",
-	justifyContent: "space-around",
-	boxShadow: "0 0 0 2px rgba(0, 0, 0, 0.05)",
-};
 export default Feedback;

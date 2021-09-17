@@ -4,8 +4,14 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Navbar from "./components/Navbar";
 import Feedback from "./components/Feedback";
+import ReviewFeedback from "./components/ReviewFeedback";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Route,
+	Redirect,
+	Switch,
+} from "react-router-dom";
 
 class App extends React.Component {
 	state = {
@@ -17,6 +23,19 @@ class App extends React.Component {
 		});
 	};
 	render() {
+		if (this.state.isRegistered) {
+			return (
+				<Router>
+					<Switch>
+						<Redirect exact from="/" to="/signup" />
+						<Route path="/signup">
+							<Navbar />
+							<SignUp />
+						</Route>
+					</Switch>
+				</Router>
+			);
+		}
 		return (
 			<div className="App">
 				<Router>
@@ -45,13 +64,7 @@ class App extends React.Component {
 							</React.Fragment>
 						)}
 					/>
-					<Route exact path="/">
-						{this.state.isRegistered ? (
-							<Redirect to="/signup" />
-						) : (
-							<Redirect to="/" />
-						)}
-					</Route>
+
 					<Route
 						path="/login"
 						render={(props) => (
@@ -60,6 +73,7 @@ class App extends React.Component {
 							</React.Fragment>
 						)}
 					/>
+
 					<Route
 						path="/signup"
 						render={(props) => (
@@ -73,6 +87,14 @@ class App extends React.Component {
 						render={(props) => (
 							<React.Fragment>
 								<Feedback />
+							</React.Fragment>
+						)}
+					/>
+					<Route
+						path="/review"
+						render={(props) => (
+							<React.Fragment>
+								<ReviewFeedback />
 							</React.Fragment>
 						)}
 					/>

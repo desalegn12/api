@@ -104,27 +104,27 @@ exports.photoUpload = asyncHandler(async (req, res, next) => {
 	if (!req.files) {
 		return next(new ErrorResponse("please upload a photo", 404));
 	}
-	// if (!req.files.photo.mimetype.startsWith("image")) {
-	// 	return next(new ErrorResponse("please upload an image", 404));
-	// }
+	if (!req.files.photo.mimetype.startsWith("image")) {
+		return next(new ErrorResponse("please upload an image", 404));
+	}
 
 	console.log(req.files.file);
 
-	// if (req.files.size > process.env.MAX_PHOTO_SIZE) {
-	// 	return next(
-	// 		new ErrorResponse(
-	// 			`please upload file size less than one mb or${process.env.MAX_PHOTO_SIZE}`,
-	// 			404
-	// 		)
-	// 	);
-	// }
-	// const name = req.files.photo.naming;
-	// naming = `photo_${DatabaseSchema.name}`;
-	// console.log(DatabaseSchema._id);
-	// res.status(200).json({
-	// 	success: true,
-	// 	data: req.files.photo,
-	// });
+	if (req.files.size > process.env.MAX_PHOTO_SIZE) {
+		return next(
+			new ErrorResponse(
+				`please upload file size less than one mb or${process.env.MAX_PHOTO_SIZE}`,
+				404
+			)
+		);
+	}
+	const name = req.files.photo.naming;
+	naming = `photo_${DatabaseSchema.name}`;
+	console.log(DatabaseSchema._id);
+	res.status(200).json({
+		success: true,
+		data: req.files.photo,
+	});
 });
 
 exports.findByQuery = asyncHandler(async (req, res, next) => {});

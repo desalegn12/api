@@ -1,0 +1,50 @@
+.stylingContainer {
+	padding: 0 10%;
+	display: flex;
+	margin: auto;
+	flex-direction: column;
+	justify-content: space-around;
+}
+.height-feedback {
+	width: 100%;
+}
+.height-login {
+	height: 300px;
+}
+.height-signup {
+	height: 400px;
+}
+.directed-image {
+	transform: rotate(180deg);
+	display: flex;
+	margin: auto;
+	padding: 20px;
+	width: 30%;
+	height: 30%;
+	opacity: 0.5;
+}
+@media (min-width: 992px) {
+	.stylingContainer {
+		padding: 0 10%;
+
+		width: 60%;
+		display: flex;
+		margin: auto;
+		flex-direction: column;
+		justify-content: space-around;
+		box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+	}
+	.height-feedback {
+		height: 500px;
+	}
+	.directed-image {
+		transform: rotate(180deg);
+		float: right;
+		position: fixed;
+		width: 200px;
+		height: 200px;
+		right: 15%;
+		bottom: 50%;
+		opacity: 0.5;
+	}
+}

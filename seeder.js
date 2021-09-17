@@ -101,6 +101,14 @@ const addCourse = async () => {
 		console.log(`${err}`.red);
 	}
 };
+const findAllComment = async () => {
+	try {
+		const comments = await Comment.find();
+		console.log(comments);
+	} catch (err) {
+		console.log(err);
+	}
+};
 if (process.argv[2] === "-i") {
 	importData();
 } else if (process.argv[2] === "-d") {
@@ -113,4 +121,6 @@ if (process.argv[2] === "-i") {
 	addCourse();
 } else if (process.argv[2] === "-dc") {
 	deleteAllComment();
+} else if (process.argv[2] === "-gc") {
+	findAllComment();
 }

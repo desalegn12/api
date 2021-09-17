@@ -12,9 +12,10 @@ const AuthRouter = require("./router/Auth");
 const CourseRouter = require("./router/courseRouter");
 const CommentRouter = require("./router/Comments");
 const error = require("./middleWare/errorHandler");
-const photoUpload = require("express-fileupload");
+const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const Grid = require("gridfs-stream");
 dotenv.config({ path: "./config/config.env" });
 
 const app = express();
@@ -25,8 +26,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 mongoDB();
+app.use(express.static("./public")); //where static files and fields put here
 app.use(express.json());
-app.use(photoUpload());
+app.use(fileUpload());
 app.use(logger);
 app.use(cookieParser());
 app.use(cors());

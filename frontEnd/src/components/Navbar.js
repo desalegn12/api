@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import {
 	Collapse,
 	Navbar,
@@ -19,9 +20,12 @@ class NavigationBar extends Component {
 			isOpen: !this.state.isOpen,
 		});
 	};
-
+	onClick = () => {
+		localStorage.setItem("token", "");
+	};
 	render() {
 		const { isOpen } = this.state;
+
 		return (
 			<div>
 				<Navbar color="light" light expand="lg" className="mb-5">
@@ -32,13 +36,21 @@ class NavigationBar extends Component {
 					<Collapse isOpen={isOpen} navbar>
 						<Nav className="col-auto" navbar>
 							<NavItem className="col-12">
-								<NavLink href="/signup">register</NavLink>
+								<NavLink href="/signup" style={!isOpen ? {} : toggleStyle}>
+									register
+								</NavLink>
 							</NavItem>
 							<NavItem className="col-12">
-								<NavLink href="/login">login</NavLink>
+								<NavLink href="/login" style={!isOpen ? {} : toggleStyle}>
+									login
+								</NavLink>
 							</NavItem>
 							<NavItem>
-								<NavLink href="#" className="col-12">
+								<NavLink
+									href="/"
+									className="col-12"
+									style={!isOpen ? {} : toggleStyle}
+									onClick={this.onClick}>
 									{" "}
 									logout
 								</NavLink>
@@ -51,4 +63,11 @@ class NavigationBar extends Component {
 	}
 }
 
+const toggleStyle = {
+	background: "#eaeaea",
+	border: "1px solid #fff",
+	color: "#333",
+	paddingLeft: "15%",
+	fontFamily: '"Times New Roman, Times, serif"',
+};
 export default NavigationBar;

@@ -1,10 +1,32 @@
 const UserSchema = require("../model/User");
 const ErrorResponse = require("../util/errorResponse");
 const asyncHandler = require("../middleWare/async");
-const errorHandler = require("../middleWare/errorHandler");
+const jwt = require("jsonwebtoken");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-	res.status(200).json(res.advancedRoutes); //any selection is working here
+	let token;
+	if (req.headers["x-access-token"]) {
+		token = req.headers["x-access-token"];
+	} else if (!token) {
+		return next(
+			new ErrorResponse("no user is registered with this route", 401)
+		);
+	}
+	jwt.verify(token, process.env.SIGN_IN_WEB_SECTRATE, async (err, decode) => {
+		req.user = await UserSchema.findById(decode.id);
+		if (!req.user) {
+			return next(
+				new ErrorResponse("you are not authorize to access this!", 401)
+			);
+		} else if (req.user.role !== "admin") {
+			return next(new ErrorResponse("this user is not admin!", 404));
+		}
+		const users = await UserSchema.find();
+		res.status(200).json({
+			success: true,
+			users,
+		});
+	});
 });
 
 //get a single user

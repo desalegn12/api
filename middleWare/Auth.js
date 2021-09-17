@@ -15,6 +15,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
 	try {
 		jwt.verify(token, process.env.SIGN_IN_WEB_SECTRATE, async (err, decode) => {
 			req.user = await UserSchema.findById(decode.id);
+			console.log(`this is the middleware function user:${req.user}`);
 		});
 
 		next();
