@@ -172,16 +172,6 @@ class SignUp extends Component {
 	}
 }
 
-// const stylingContainer = {
-// 	padding: "0 10%",
-// 	width: "60%",
-// 	height: "400px",
-// 	margin: "auto",
-// 	display: "flex",
-// 	flexDirection: "column",
-// 	justifyContent: "space-around",
-// 	boxShadow: "0 0 0 2px rgba(0, 0, 0, 0.05)",
-// };
 const buttonStyle = {
 	background: "white",
 	color: "blue",

@@ -3,8 +3,9 @@ import React from "react";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Navbar from "./components/Navbar";
-import Feedback from "./components/Feedback";
-import ReviewFeedback from "./components/ReviewFeedback";
+import Feedback from "./components/Moderator";
+import ReviewFeedback from "./components/Moderator";
+import EditContent from "./components/ReviewFeedback";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
 	BrowserRouter as Router,
@@ -95,6 +96,14 @@ class App extends React.Component {
 						render={(props) => (
 							<React.Fragment>
 								<ReviewFeedback />
+							</React.Fragment>
+						)}
+					/>
+					<Route
+						path="/edit"
+						render={(props) => (
+							<React.Fragment>
+								<EditContent />
 							</React.Fragment>
 						)}
 					/>
