@@ -85,6 +85,7 @@ class Feedback extends Component {
 								name="comment"
 								value={this.state.comment}
 								class="form-control"
+								
 								onChange={this.onChange}
 								id="floatingTextarea2"
 								style={{ height: "250px" }}></textarea>

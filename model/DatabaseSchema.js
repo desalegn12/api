@@ -10,7 +10,7 @@ const DatabaseModelSchema = new mongoose.Schema(
 			required: [true, "please insert name cause is is required field"],
 			unique: true,
 			trim: true,
-			maxlength: [25, "nome length will not be length greater than 25"],
+			maxlength: [50, "name length will not be length greater than 25"],
 			minlengthz: [2, "the name length must not be below 2"],
 		},
 		slug: String,

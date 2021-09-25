@@ -104,7 +104,7 @@ exports.photoUpload = asyncHandler(async (req, res, next) => {
 	if (!req.files) {
 		return next(new ErrorResponse("please upload a photo", 404));
 	}
-	if (!req.files.photo.mimetype.startsWith("image")) {
+	if (!req.files.file.mimetype.startsWith("image")) {
 		return next(new ErrorResponse("please upload an image", 404));
 	}
 
@@ -118,12 +118,15 @@ exports.photoUpload = asyncHandler(async (req, res, next) => {
 			)
 		);
 	}
-	const name = req.files.photo.naming;
-	naming = `photo_${DatabaseSchema.name}`;
+
+	await DatabaseSchema.findByIdAndUpdate(req.params.id, req.files.file, {
+		new: true,
+		runValidators: true,
+	});
 	console.log(DatabaseSchema._id);
 	res.status(200).json({
 		success: true,
-		data: req.files.photo,
+		data: req.files.file,
 	});
 });
 

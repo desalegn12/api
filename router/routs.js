@@ -21,7 +21,7 @@ const { protect, authorize } = require("../middleWare/Auth");
 
 router
 	.route("/")
-	.get(advancedResult(databaseSchema, "courses"), getData)
+	.get(advancedResult(databaseSchema, "courses"), protect, getData)
 	.post(protect, authorize("admin"), createData);
 
 //cause those request methods need the id of the data

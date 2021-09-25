@@ -16,4 +16,4 @@ router.route("/:id").put(protect, updateComment).delete(protect, deleteComment);
 router.route("/:id/file").put(fileUpload);
 router.route("/").get(getComment).post(createComment);
 
-module.exports = router;
+module.exports = router;																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					
