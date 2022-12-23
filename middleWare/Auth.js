@@ -6,7 +6,7 @@ const UserSchema = require("../model/User");
 exports.protect = asyncHandler(async (req, res, next) => {
 	let token;
 	if (req.headers["Authorization"]) {
-		token = req.headers["Authorization"];
+		token = req.headers["Authorization"].split(" ")[1];//which gets the token at the bearer authorization header
 	} else if (!token) {
 		return next(
 			new ErrorResponse("no user is registered with this route", 401)
