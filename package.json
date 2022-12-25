@@ -5,9 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "back": "nodemon server.js",
-    "front": "npm start --prefix frontEnd",
-    "dev": "concurrently \"npm run back\" \"npm run front\""
+    "back": "nodemon server",
+    "front": "npm start --prefix frontEnd"
   },
   "repository": {
     "type": "git",
@@ -20,12 +19,28 @@
   },
   "homepage": "https://github.com/desalegn12/template_for_backend#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "concurrently": "^6.2.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
     "gridfs-stream": "^1.1.1",
+    "jsonwebtoken": "^9.0.0",
     "method-override": "^3.0.0",
+    "mongodb": "^4.13.0",
+    "mongoose": "^6.8.1",
+    "morgan": "^1.10.0",
     "multer": "^1.4.3",
     "multer-gridfs-storage": "^5.0.1",
-    "reactstrap": "^8.10.0"
+    "node-geocoder": "^4.2.0",
+    "nodemailer": "^6.8.0",
+    "reactstrap": "^8.10.0",
+    "slugify": "^1.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
