@@ -15,7 +15,6 @@ const error = require("./middleWare/errorHandler");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const Grid = require("gridfs-stream");
 dotenv.config({ path: "./config/config.env" });
 
 const app = express();
@@ -52,4 +51,4 @@ process.on("unhandledRejection", (err, promise) => {
 	server.close(process.exit(1));
 });
 
-// "concurrently \"\"\"\"" i.e just how to concurrently start the two servers, right
+

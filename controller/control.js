@@ -1,6 +1,8 @@
 const ErrorResponse = require("../util/errorResponse");
 const asyncHandler = require("../middleWare/async");
 const DatabaseSchema = require("../model/DatabaseSchema");
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })//created latter when the api is called 
 
 // const data = JSON.parse(body);
 
@@ -95,7 +97,8 @@ exports.deleteData = asyncHandler(async (req, res, next) => {
 	});
 });
 
-exports.photoUpload = asyncHandler(async (req, res, next) => {
+exports.photoUpload = asyncHandler(upload.single("image"), async (req, res, next) => {
+	//which means the image should be the front-end form name 
 	const photo = await DatabaseSchema.findById(req.params.id);
 
 	if (!photo) {
@@ -107,8 +110,6 @@ exports.photoUpload = asyncHandler(async (req, res, next) => {
 	if (!req.files.file.mimetype.startsWith("image")) {
 		return next(new ErrorResponse("please upload an image", 404));
 	}
-
-	console.log(req.files.file);
 
 	if (req.files.size > process.env.MAX_PHOTO_SIZE) {
 		return next(
@@ -130,10 +131,5 @@ exports.photoUpload = asyncHandler(async (req, res, next) => {
 	});
 });
 
-exports.findByQuery = asyncHandler(async (req, res, next) => {});
-/**
- * therefore the user's id could be found
- * under the token, req.user user the token and change it to
- * the id of the user then user id associated with the db id, that is right
- *
- */
+
+
