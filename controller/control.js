@@ -104,14 +104,14 @@ exports.photoUpload = asyncHandler(upload.single("image"), async (req, res, next
 	if (!photo) {
 		return next(new ErrorResponse("photo uploaded is not found ", 404));
 	}
-	if (!req.files) {
+	if (!req.file) {
 		return next(new ErrorResponse("please upload a photo", 404));
 	}
-	if (!req.files.file.mimetype.startsWith("image")) {
+	if (!req.file.mimetype.startsWith("image")) {
 		return next(new ErrorResponse("please upload an image", 404));
 	}
 
-	if (req.files.size > process.env.MAX_PHOTO_SIZE) {
+	if (req.file.size > process.env.MAX_PHOTO_SIZE) {
 		return next(
 			new ErrorResponse(
 				`please upload file size less than one mb or${process.env.MAX_PHOTO_SIZE}`,
@@ -124,10 +124,9 @@ exports.photoUpload = asyncHandler(upload.single("image"), async (req, res, next
 		new: true,
 		runValidators: true,
 	});
-	console.log(DatabaseSchema._id);
 	res.status(200).json({
 		success: true,
-		data: req.files.file,
+		data: req.file,//here the properties of the file 
 	});
 });
 
